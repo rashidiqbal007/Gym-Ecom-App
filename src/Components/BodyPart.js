@@ -1,8 +1,25 @@
 import React from 'react'
+import { Stack, Typography } from "@mui/material";
+import Icon from "../assets/icons/gym.png"
 
-const BodyPart = () => {
+const BodyPart = ({ item, bodyPart, setBodyPart }) => {
   return (
-    <div>BodyPart</div>
+    <Stack
+      type="button"
+      alignItems="center"
+      justifyContent="center"
+      className='bodyPart-card'
+      sx={
+        bodyPart === item ? {
+          borderTop: '4px solid #ff2625',
+          backgroundColor: '#fff',
+
+        } : ''
+      }
+
+    >
+      <img src={Icon} alt="dumbbell" styles={{ height: "40px", width: "40px" }} />
+    </Stack>
   )
 }
 

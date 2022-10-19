@@ -14,7 +14,7 @@ const Home = () => {
   return (
     <Box>
       <HeroBanner />
-      {/* shared states in both components Note: if same states had to be passed in multiple components we could use contextapi */}
+      {/* shared states in both components Note: if same states had to be passed in multiple components we could use contextapi          */}
       <SearchExercises setExercises={setExercises} bodyPart={bodyPart} setbodyPart={setbodyPart} />
       <Exercises setExercises={setExercises} bodyPart={bodyPart} setbodyPart={setbodyPart} />
     </Box>
