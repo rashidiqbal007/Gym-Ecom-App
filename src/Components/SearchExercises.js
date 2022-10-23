@@ -1,97 +1,64 @@
-import React from 'react'
-import { useEffect, useState } from 'react'
-import { Box, Button, Stack, TextField, Typography } from '@mui/material'
-import { fetchData, exerciseOptions } from "../utils/fetchData";
+import React, { useEffect, useState } from 'react';
+import { Box, Button, Stack, TextField, Typography } from '@mui/material';
+
+import { exerciseOptions, fetchData } from '../utils/fetchData';
 import HorizontalScrollBar from './HorizontalScrollBar';
 
-// bodypart isliye mngwa rhe because initial state is "all" whereas Exercises ki initialstate arrayempty hai
 const SearchExercises = ({ setExercises, bodyPart, setBodyPart }) => {
   const [search, setSearch] = useState('');
   const [bodyParts, setBodyParts] = useState([]);
 
-  // this is function for fetching body part categories
   useEffect(() => {
     const fetchExercisesData = async () => {
-      const bodyPartsData = await fetchData("https://exercisedb.p.rapidapi.com/exercises/bodyPartList",
-        exerciseOptions);
+      const bodyPartsData = await fetchData('https://exercisedb.p.rapidapi.com/exercises/bodyPartList', exerciseOptions);
+
       setBodyParts(['all', ...bodyPartsData]);
-    }
-    // call function as soon as the app loads
+    };
+
     fetchExercisesData();
   }, []);
 
-  // async means this will take some time also most cases it is fetching data from the API.
   const handleSearch = async () => {
     if (search) {
+      const exercisesData = await fetchData('https://exercisedb.p.rapidapi.com/exercises', exerciseOptions);
 
-      // exerciseoptions parameter will enable users to fetch exercises from the API in fetchdata.js
-      const exercisesData = await fetchData("https://exercisedb.p.rapidapi.com/exercises", exerciseOptions);
-      console.log(exercisesData);
-
-      // making our search stronger by using filter method
-      const searchedExercises = exercisesData.filter((exercise) =>
-        exercise.name.toLowerCase().includes(search)
-        || exercise.target.toLowerCase().includes(search)
-        || exercise.equipment.toLowerCase().includes(search)
-        || exercise.bodyPart.toLowerCase().includes(search)
-
-
+      const searchedExercises = exercisesData.filter(
+        (item) => item.name.toLowerCase().includes(search)
+               || item.target.toLowerCase().includes(search)
+               || item.equipment.toLowerCase().includes(search)
+               || item.bodyPart.toLowerCase().includes(search),
       );
-      // once were done with the search we are gonna clear the search.
+
+      window.scrollTo({ top: 1800, left: 100, behavior: 'smooth' });
+
       setSearch('');
       setExercises(searchedExercises);
-      // until here weve searched & fetched the exercisesdata but next we have to show it somewhere on frontend
     }
-  }
-
-
+  };
 
   return (
-    <Stack alignItems="center" mt="37px" justifyContent="center" p='20px'>
-
-      <Typography fontWeight={700} sx={{ fontSize: { lg: "44px", xs: "30px" } }} mb="50px" textAlign="center">
-        Awesome Workouts You <br />
-        Should Know
+    <Stack alignItems="center" mt="37px" justifyContent="center" p="20px">
+      <Typography fontWeight={700} sx={{ fontSize: { lg: '44px', xs: '30px' } }} mb="49px" textAlign="center">
+        Awesome Exercises You <br /> Should Know
       </Typography>
       <Box position="relative" mb="72px">
         <TextField
-          sx={{
-            input: { fontWeight: '700', border: 'none', borderRadius: '4px' },
-            width: { lg: '800px', xs: '350px' },
-            backgroundColor: '#fff',
-            borderRadius: '40px',
-          }}
           height="76px"
-          // initial state of search i.e empty string
+          sx={{ input: { fontWeight: '700', border: 'none', borderRadius: '4px' }, width: { lg: '1170px', xs: '350px' }, backgroundColor: '#fff', borderRadius: '40px' }}
           value={search}
-          // setstate value on change
-          onChange={(e) => { setSearch(e.target.value.toLowerCase()) }}
-          placeholder="Search for exercises"
+          onChange={(e) => setSearch(e.target.value.toLowerCase())}
+          placeholder="Search Exercises"
           type="text"
         />
-        <Button className="search-btn"
-          sx={{
-            bgcolor: '#ff2625',
-            color: "#fff",
-            textTransform: 'none',
-            width: { lg: '175px', xs: '80px' },
-            fontSize: { lg: '20px', xs: '14px' },
-            height: "56px",
-            // so that btn comes to right side of the screen!
-            position: 'absolute',
-            right: '0',
-          }}
-          // onclick function to handle search created above.
-          onClick={handleSearch} >
+        <Button className="search-btn" sx={{ bgcolor: '#FF2625', color: '#fff', textTransform: 'none', width: { lg: '173px', xs: '80px' }, height: '56px', position: 'absolute', right: '0px', fontSize: { lg: '20px', xs: '14px' } }} onClick={handleSearch}>
           Search
         </Button>
       </Box>
-      <Box sx={{ position: 'relative', width: '100%', p: "20px" }}>
-        <HorizontalScrollBar data={bodyParts} bodyPart={bodyPart} setBodyPart={setBodyPart} isbodyParts/>
+      <Box sx={{ position: 'relative', width: '100%', p: '20px' }}>
+        <HorizontalScrollBar data={bodyParts} bodyParts setBodyPart={setBodyPart} bodyPart={bodyPart} />
       </Box>
-
     </Stack>
-  )
-}
+  );
+};
 
-export default SearchExercises
+export default SearchExercises;
